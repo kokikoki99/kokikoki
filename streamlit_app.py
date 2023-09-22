@@ -1,31 +1,25 @@
-# Streamlitライブラリをインポート
 import streamlit as st
+import random
 
-# ページ設定（タブに表示されるタイトル、表示幅）
-st.set_page_config(page_title="タイトル", layout="wide")
+st.title('Multiplication Quiz')
+st.sidebar.title('Options')
+num_questions = st.sidebar.slider('Number of Questions', 1, 10, 5)
 
-# タイトルを設定
-st.title('Streamlitのサンプルアプリ')
-
-# テキスト入力ボックスを作成し、ユーザーからの入力を受け取る
-user_input = st.text_input('あなたの名前を入力してください')
-
-# ボタンを作成し、クリックされたらメッセージを表示
-if st.button('挨拶する'):
-    if user_input:  # 名前が入力されているかチェック
-        st.success(f'🌟 こんにちは、{user_input}さん! 🌟')  # メッセージをハイライト
+# Display a random multiplication question and ask the user to input the correct answer
+correct_answers = 0
+for i in range(num_questions):
+    num1 = random.randint(1, 10)
+    num2 = random.randint(1, 10)
+    correct_answer = num1 * num2
+    user_answer = st.number_input(f'Question {i+1}: {num1} x {num2} =', min_value=0, max_value=100, step=1)
+    if user_answer == correct_answer:
+        st.write('Correct!')
+        correct_answers += 1
     else:
-        st.error('名前を入力してください。')  # エラーメッセージを表示
+        st.write(f'Sorry, the correct answer was {correct_answer}.')
 
-# スライダーを作成し、値を選択
-number = st.slider('好きな数字（10進数）を選んでください', 0, 100)
+# Display the user's score
+st.write(f'You got {correct_answers} out of {num_questions} questions correct.')
 
-# 補足メッセージ
-st.caption("十字キー（左右）でも調整できます。")
+$ streamlit run streamlit_app.py
 
-# 選択した数字を表示
-st.write(f'あなたが選んだ数字は「{number}」です。')
-
-# 選択した数値を2進数に変換
-binary_representation = bin(number)[2:]  # 'bin'関数で2進数に変換し、先頭の'0b'を取り除く
-st.info(f'🔢 10進数の「{number}」を2進数で表現すると「{binary_representation}」になります。 🔢')  # 2進数の表示をハイライト
